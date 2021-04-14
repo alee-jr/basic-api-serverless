@@ -1,0 +1,49 @@
+service: basic-serverless-crud
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: us-west-2
+  timeout: 30
+  environment:
+    MONGODB_USER: mongodb://localhost:27017
+
+plugins:
+  - serverless-offline
+
+package:
+  individually: true
+  exclude:
+    - offline/**
+    - README.md
+
+functions:
+  createProduto:
+    handler: src/controllers/ProdutoController.postProduto
+    events:
+      - http:
+          path: /produto/create
+          method: post
+          cors: true
+  getProdutos:
+    handler: src/controllers/ProdutoController.getProdutos
+    events:
+      - http:
+          path: /produtos
+          method: get
+          cors: true
+  deleteProduto:
+    handler: src/controllers/ProdutoController.deleteProduto
+    events:
+      - http:
+          path: /produto/delete
+          method: get
+          cors: true
+  putProduto:
+    handler: src/controllers/ProdutoController.putProduto
+    events:
+      - http:
+          path: /produto/put
+          method: put
+          cors: true
